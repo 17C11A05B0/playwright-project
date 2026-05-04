@@ -1,0 +1,107 @@
+# Instructions
+
+- Following Playwright test failed.
+- Explain why, be concise, respect Playwright best practices.
+- Provide a snippet of code with the fix, if possible.
+
+# Test info
+
+- Name: tcddt.spec.js >> Login Test TC05
+- Location: tests\tcddt.spec.js:10:1
+
+# Error details
+
+```
+Test timeout of 30000ms exceeded.
+```
+
+```
+Error: locator.waitFor: Test timeout of 30000ms exceeded.
+Call log:
+  - waiting for locator('input[name="username"]') to be visible
+
+```
+
+# Page snapshot
+
+```yaml
+- generic [ref=e3]:
+  - banner [ref=e4]:
+    - heading "Bad gateway Error code 502" [level=1] [ref=e5]:
+      - generic [ref=e6]: Bad gateway
+      - text: Error code 502
+    - generic [ref=e7]:
+      - text: Visit
+      - link "cloudflare.com" [ref=e8] [cursor=pointer]:
+        - /url: https://www.cloudflare.com/5xx-error-landing?utm_source=errorcode_502&utm_campaign=parabank.parasoft.com
+      - text: for more information.
+    - generic [ref=e9]: 2026-05-01 06:37:45 UTC
+  - generic [ref=e12]:
+    - generic [ref=e13]:
+      - text: You
+      - heading "Browser" [level=3] [ref=e17]
+      - text: Working
+    - generic [ref=e18]:
+      - link [ref=e20] [cursor=pointer]:
+        - /url: https://www.cloudflare.com/5xx-error-landing?utm_source=errorcode_502&utm_campaign=parabank.parasoft.com
+      - text: Hyderabad
+      - heading "Cloudflare" [level=3] [ref=e23]:
+        - link "Cloudflare" [ref=e24] [cursor=pointer]:
+          - /url: https://www.cloudflare.com/5xx-error-landing?utm_source=errorcode_502&utm_campaign=parabank.parasoft.com
+      - text: Working
+    - generic [ref=e25]:
+      - text: parabank.parasoft.com
+      - heading "Host" [level=3] [ref=e29]
+      - text: Error
+  - generic [ref=e31]:
+    - generic [ref=e32]:
+      - heading "What happened?" [level=2] [ref=e33]
+      - paragraph [ref=e34]: The web server reported a bad gateway error.
+    - generic [ref=e35]:
+      - heading "What can I do?" [level=2] [ref=e36]
+      - paragraph [ref=e37]: Please try again in a few minutes.
+  - paragraph [ref=e39]:
+    - generic [ref=e40]:
+      - text: "Cloudflare Ray ID:"
+      - strong [ref=e41]: 9f4cc7495a967b7a
+    - text: •
+    - generic [ref=e42]:
+      - text: "Your IP:"
+      - button "Click to reveal" [ref=e43] [cursor=pointer]
+      - text: •
+    - generic [ref=e44]:
+      - text: Performance & security by
+      - link "Cloudflare" [ref=e45] [cursor=pointer]:
+        - /url: https://www.cloudflare.com/5xx-error-landing?utm_source=errorcode_502&utm_campaign=parabank.parasoft.com
+```
+
+# Test source
+
+```ts
+  1  | const { test, expect } = require('@playwright/test');
+  2  | const XLSX = require('xlsx');
+  3  | 
+  4  | const workbook = XLSX.readFile('./testdata/parabank_login_data.xlsx');
+  5  | const sheet = workbook.Sheets['LoginData'];
+  6  | const data = XLSX.utils.sheet_to_json(sheet);
+  7  | 
+  8  | for (const row of data) {
+  9  | 
+  10 | test(`Login Test ${row.TestCaseID}`, async ({ page }) => {
+  11 | 
+  12 |     await page.goto('https://parabank.parasoft.com/parabank/index.htm');
+  13 | 
+  14 |     // wait for username field
+> 15 |     await page.locator('input[name="username"]').waitFor();
+     |                                                  ^ Error: locator.waitFor: Test timeout of 30000ms exceeded.
+  16 | 
+  17 |     await page.fill('input[name="username"]', row.Username || "");
+  18 |     await page.fill('input[name="password"]', row.Password || "");
+  19 | 
+  20 |     await page.click('input[value="Log In"]');
+  21 | 
+  22 |     await page.waitForTimeout(2000);
+  23 | 
+  24 | });
+  25 | }
+```
