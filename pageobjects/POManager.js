@@ -1,6 +1,7 @@
 import { HomePage } from "./HomePage"
 import { RegistrationPage } from "./RegistrationPage"
 import { LoginPage } from "./LoginPage"
+import { OpenAccountPage } from "./OpenAccountPage"
 
 export class POManager 
 {
@@ -21,7 +22,11 @@ export class POManager
         return this.registrationPage
     } 
 
-     getLoginPage() {                // ✅ ADD THIS
-    return new LoginPage(this.page)
-  }
+    getLoginPage() {
+        return new LoginPage(this.page)
+    }
+
+    getOpenAccountPage() {
+        return new OpenAccountPage(this.page)
+    }
 }

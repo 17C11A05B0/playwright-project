@@ -4,6 +4,7 @@
      {
              this.page=page
              this.registerLink=page.locator("//a[normalize-space()='Register']")
+             this.openNewAccountLink=page.locator('a:has-text("Open New Account")')
      }
 
       async goTo()
@@ -14,5 +15,10 @@
        async clickOnRegisterLink()
        {
           await this.registerLink.click()
+       }
+
+       async clickOnOpenNewAccount()
+       {
+          await this.openNewAccountLink.click()
        }
   }
